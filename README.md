@@ -11,8 +11,7 @@ Main functions:
 - global overlay processing ⚙️
 - automatic download of biomes from .jar 📦
 
-How does this script work?
-The script compares the names of overlays and biomes and merges them.
+How does this script work? The script compares the names of overlays and biomes and merges them.
 
 Example overlay:
 overlays/forest.json
@@ -35,4 +34,4 @@ overlays/forest.json
     ],
     []
   ]
-}```
+}
