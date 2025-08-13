@@ -15,7 +15,8 @@ How does this script work? The script compares the names of overlays and biomes 
 
 Example overlay:
 overlays/forest.json
-```{
+```
+{
   "features": [
     [],
     [],
