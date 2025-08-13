@@ -16,7 +16,7 @@ The script compares the names of overlays and biomes and merges them.
 
 Example overlay:
 overlays/forest.json
-{
+```{
   "features": [
     [],
     [],
@@ -35,4 +35,4 @@ overlays/forest.json
     ],
     []
   ]
-}
+}```
