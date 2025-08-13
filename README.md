@@ -9,3 +9,30 @@ Main functions:
 - the ability to quickly create overlays ⚡️
 - the ability to delete unnecessary biomes by dimensions 📤
 - global overlay processing ⚙️
+- automatic download of biomes from .jar 📦
+
+How does this script work?
+The script compares the names of overlays and biomes and merges them.
+
+Example overlay:
+overlays/forest.json
+{
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "my_namespace:new_tree",
+      "my_namespace2:new_flower",
+      "my_test_namespace:new_rock"
+    ],
+    []
+  ]
+}
