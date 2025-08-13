@@ -5,7 +5,7 @@ import shutil
 from pathlib import Path
 
 # Версия программы
-PROGRAM_VERSION = "2.0"
+PROGRAM_VERSION = "1.0"
 
 # Настройки путей
 BASE_DIR = Path(__file__).parent
@@ -534,4 +534,7 @@ def main_menu():
 if __name__ == "__main__":
     main_menu()
 
+# ==================================================
 # Creator: MrPanda8
+# GitHub: https://github.com/MrPanda8/Biome-Tool
+# ==================================================
