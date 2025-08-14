@@ -1,21 +1,55 @@
-## 🌍 Biome Tool ✨
-This is a python script for automating the injection of custom features (and more) into vanilla Minecraft biomes.
+# 🌍 Biome Tool ✨
 
-Before you begin, install the latest version of Python 🐍.
+**Automated Feature Injection for Minecraft Biomes**
 
-Main functions:
-- convenient injection of custom features into biomes ⭐️
-- support 3 languages (en/ru/zh) (sorry if the translation is not perfect) 🌐
-- the ability to quickly create overlays ⚡️
-- the ability to delete unnecessary biomes by dimensions 📤
-- global overlay processing ⚙️
-- automatic download of biomes from .jar 📦
+This Python script automates the process of injecting custom features into vanilla Minecraft biomes. Designed for datapack creators and modders, it provides a streamlined workflow for biome customization.
 
-How does this script work? The script compares the names of overlays and biomes and merges them.
+## 🚀 Features
 
-Example overlay:
-overlays/forest.json
-```
+- ⭐ **Custom Feature Injection** - Seamlessly add custom features to biomes
+- 🌐 **Multilingual Support** - Interface in English, Russian, and Chinese
+- ⚡ **Overlay Management** - Quickly create and manage biome overlays
+- 📤 **Biome Filtering** - Delete biomes by dimension or custom groups
+- ⚙️ **Global Overlays** - Apply changes to all biomes at once
+- 📦 **Auto-Download** - Extract biomes directly from Minecraft .jar files
+- 🔄 **Backup System** - Automatic backups on every launch
+- 👥 **Group System** - Organize biomes into custom groups
+- 💾 **Pre-made Groups** - Includes ready-to-use biome groups (see `pre_made_groups` folder)
+
+## 📋 Requirements
+
+- Python 3.8+
+- Minecraft Java Edition (for biome extraction)
+
+## 🛠 Installation
+
+1. Download the tool archive
+2. Extract to a folder of your choice
+3. Run `main.py` or `start.bat` (Windows)
+
+## 🏗 Project Structure
+biome_tool/
+├── pre_made_groups/ # Ready-to-use biome groups (copy to groups/)
+├── backups/ # Automatic backups
+├── biomes/ # Vanilla Minecraft biomes
+├── export/ # Processed biomes (output)
+├── groups/ # Custom biome groups
+├── overlays/ # Biome overlays
+│ └── all/ # Global overlays
+├── main.py # Main script
+└── start.bat # Launch script for Windows
+
+## 🧰 How It Works
+
+The script matches overlay files with biome files and merges their features:
+
+1. **Overlay Preparation**: Create JSON files in `overlays` directory
+2. **Processing**: Run the tool to merge overlays with vanilla biomes
+3. **Output**: Modified biomes appear in `export` folder
+
+### Example Overlay
+`overlays/forest.json`:
+```json
 {
   "features": [
     [],
@@ -37,6 +71,7 @@ overlays/forest.json
   ]
 }
 ```
+
 Decoration steps
 Features and structures generate in 11 steps after each other called decoration steps.
 
