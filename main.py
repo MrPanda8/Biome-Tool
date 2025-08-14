@@ -6,7 +6,7 @@ import datetime
 from pathlib import Path
 
 # Версия программы
-PROGRAM_VERSION = "1.0"
+PROGRAM_VERSION = "1.1"
 
 # Настройки путей
 BASE_DIR = Path(__file__).parent
