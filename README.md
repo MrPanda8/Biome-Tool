@@ -35,7 +35,7 @@ This Python script automates the process of injecting custom features into vanil
 ├── `export/` - Processed biomes (output)  
 ├── `groups/` - Custom biome groups  
 ├── `overlays/` - Biome overlays  
-│   └── `all/` - Global overlays  
+│   └── `all/` - Global overlay  
 ├── `main.py` - Main script  
 └── `start.bat` - Launch script for Windows
 
