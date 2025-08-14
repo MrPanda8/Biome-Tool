@@ -1,0 +1,7 @@
+{
+  "name": "technical_biomes",
+  "description": "Custom biome group: technical_biomes",
+  "biomes": [
+    "the_void"
+  ]
+}

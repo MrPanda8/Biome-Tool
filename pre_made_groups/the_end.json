@@ -1,0 +1,11 @@
+{
+  "name": "the_end",
+  "description": "Custom biome group: the_end",
+  "biomes": [
+    "the_end",
+    "end_highlands",
+    "end_midlands",
+    "small_end_islands",
+    "end_barrens"
+  ]
+}
