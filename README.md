@@ -28,16 +28,16 @@ This Python script automates the process of injecting custom features into vanil
 3. Run `main.py` or `start.bat` (Windows)
 
 ## 🏗 Project Structure
-biome_tool/
-├── pre_made_groups/ # Ready-to-use biome groups (copy to groups/)
-├── backups/ # Automatic backups
-├── biomes/ # Vanilla Minecraft biomes
-├── export/ # Processed biomes (output)
-├── groups/ # Custom biome groups
-├── overlays/ # Biome overlays
-│ └── all/ # Global overlays
-├── main.py # Main script
-└── start.bat # Launch script for Windows
+`biome_tool/`  
+├── `pre_made_groups/` - Ready-to-use biome groups (copy to groups/)  
+├── `backups/` - Automatic backups  
+├── `biomes/` - Vanilla Minecraft biomes  
+├── `export/` - Processed biomes (output)  
+├── `groups/` - Custom biome groups  
+├── `overlays/` - Biome overlays  
+│   └── `all/` - Global overlays  
+├── `main.py` - Main script  
+└── `start.bat` - Launch script for Windows
 
 ## 🧰 How It Works
 
