@@ -2,6 +2,7 @@ import os
 import json
 import zipfile
 import shutil
+import datetime
 from pathlib import Path
 
 # Версия программы
@@ -14,6 +15,7 @@ BIOMES_DIR = BASE_DIR / "biomes"
 OVERLAYS_DIR = BASE_DIR / "overlays"
 ALL_OVERLAY_DIR = OVERLAYS_DIR / "all"
 EXPORT_DIR = BASE_DIR / "export"
+BACKUPS_DIR = BASE_DIR / "backups"
 
 # Списки биомов по измерениям
 OVERWORLD_BIOMES = []  # Будет заполняться автоматически
@@ -61,6 +63,9 @@ LANGUAGES = {
         "cancelled": "Operation cancelled",
         "global_overlay_created": "Created global overlay template",
         "no_biomes_to_delete": "No {} biomes found to delete",
+        "creating_backup": "Creating backup...",
+        "backup_created": "Backup created: {}",
+        "backup_failed": "Backup failed: {}",
     },
     "ru": {
         "welcome": f"Инструмент обработки биомов v{PROGRAM_VERSION}",
@@ -95,6 +100,9 @@ LANGUAGES = {
         "cancelled": "Операция отменена",
         "global_overlay_created": "Создан шаблон глобального оверлея",
         "no_biomes_to_delete": "Не найдено биомов {} для удаления",
+        "creating_backup": "Создание резервной копии...",
+        "backup_created": "Резервная копия создана: {}",
+        "backup_failed": "Ошибка создания резервной копии: {}",
     },
     "zh": {
         "welcome": f"生物群系处理工具 v{PROGRAM_VERSION}",
@@ -129,6 +137,9 @@ LANGUAGES = {
         "cancelled": "操作已取消",
         "global_overlay_created": "已创建全局叠加模板",
         "no_biomes_to_delete": "未找到 {} 生物群系可删除",
+        "creating_backup": "正在创建备份...",
+        "backup_created": "备份已创建: {}",
+        "backup_failed": "备份失败: {}",
     }
 }
 
@@ -392,7 +403,7 @@ def change_language(config):
 def first_run_setup(config):
     """Обработка первого запуска программы"""
     # Создаем необходимые директории
-    for folder in [BIOMES_DIR, OVERLAYS_DIR, ALL_OVERLAY_DIR, EXPORT_DIR]:
+    for folder in [BIOMES_DIR, OVERLAYS_DIR, ALL_OVERLAY_DIR, EXPORT_DIR, BACKUPS_DIR]:
         folder.mkdir(exist_ok=True, parents=True)
     
     # Проверяем, нужно ли выполнить настройку первого запуска
@@ -487,6 +498,39 @@ def delete_biomes_by_dimension(config):
     
     print("\n" + lang["deleted_count"].format(deleted_count))
 
+def create_backup(config):
+    """Создает резервную копию важных папок"""
+    lang = get_lang(config)
+    
+    # Создаем папку для бэкапов, если ее нет
+    BACKUPS_DIR.mkdir(exist_ok=True, parents=True)
+    
+    # Генерируем имя файла с текущей датой и временем
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    backup_name = f"backup_{timestamp}.zip"
+    backup_path = BACKUPS_DIR / backup_name
+    
+    print(lang["creating_backup"])
+    
+    try:
+        # Создаем ZIP-архив
+        with zipfile.ZipFile(backup_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            # Добавляем папки в архив
+            for folder in [EXPORT_DIR, OVERLAYS_DIR, BIOMES_DIR]:
+                if folder.exists():
+                    # Рекурсивно обходим все файлы в папке
+                    for file in folder.rglob('*'):
+                        if file.is_file():
+                            # Создаем относительный путь для архива
+                            arcname = file.relative_to(BASE_DIR)
+                            zipf.write(file, arcname)
+        
+        print(lang["backup_created"].format(backup_name))
+        return True
+    except Exception as e:
+        print(lang["backup_failed"].format(str(e)))
+        return False
+
 def main_menu():
     """Главное меню программы"""
     # Загружаем конфигурацию
@@ -494,6 +538,9 @@ def main_menu():
     
     # Первоначальная настройка
     config = first_run_setup(config)
+    
+    # Создаем резервную копию при запуске
+    create_backup(config)
     
     lang = get_lang(config)
     print(f"\n{lang['welcome']}")
