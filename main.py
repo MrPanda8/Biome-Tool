@@ -6,7 +6,7 @@ import datetime
 from pathlib import Path
 
 # Версия программы
-PROGRAM_VERSION = "1.2"
+PROGRAM_VERSION = "1.3"
 
 # Настройки путей
 BASE_DIR = Path(__file__).parent
@@ -69,6 +69,9 @@ LANGUAGES = {
         "invalid_biomes": "Invalid biome names: {}",
         "select_option": "Select option: ",
         "groups_count": "Groups: {}",
+        "global_overlay_menu": "\nApply global overlay to:",
+        "global_overlay_all": "1. All overlays",
+        "global_overlay_group": "2. By group",
     },
     "ru": {
         "welcome": f"Инструмент обработки биомов v{PROGRAM_VERSION}",
@@ -119,6 +122,9 @@ LANGUAGES = {
         "invalid_biomes": "Недопустимые названия биомов: {}",
         "select_option": "Выберите опцию: ",
         "groups_count": "Групп: {}",
+        "global_overlay_menu": "\nПрименить глобальный оверлей к:",
+        "global_overlay_all": "1. Ко всем оверлеям",
+        "global_overlay_group": "2. По группам",
     },
     "zh": {
         "welcome": f"生物群系处理工具 v{PROGRAM_VERSION}",
@@ -169,6 +175,9 @@ LANGUAGES = {
         "invalid_biomes": "无效的生物群系名称: {}",
         "select_option": "选择选项: ",
         "groups_count": "组: {}",
+        "global_overlay_menu": "\n应用全局叠加到:",
+        "global_overlay_all": "1. 所有叠加文件",
+        "global_overlay_group": "2. 按组",
     }
 }
 
@@ -359,6 +368,51 @@ def apply_global_overlay(config):
     """Применяет глобальный оверлей ко всем оверлеям"""
     lang = get_lang(config)
     
+    # Меню выбора области применения (с переводом)
+    print(lang["global_overlay_menu"])
+    print(lang["global_overlay_all"])
+    print(lang["global_overlay_group"])
+    choice = input(lang["select_option"]).strip()
+    
+    # Обрабатываем выбор
+    if choice == "1":  # Все оверлеи
+        overlay_files = list(OVERLAYS_DIR.glob("*.json"))
+    elif choice == "2":  # По группе
+        group_files = list(GROUPS_DIR.glob("*.json"))
+        if not group_files:
+            print(lang["no_groups"].format(GROUPS_DIR))
+            return
+            
+        # Выбор группы
+        print("\nAvailable groups:")
+        for i, group_file in enumerate(group_files, 1):
+            print(f"{i}. {group_file.stem}")
+        print(f"{len(group_files)+1}. {lang['cancelled']}")
+        
+        try:
+            group_choice = int(input(lang["select_group"]).strip())
+            if group_choice == len(group_files)+1:
+                print(lang["cancelled"])
+                return
+            group_file = group_files[group_choice-1]
+        except (ValueError, IndexError):
+            print(lang["invalid_group"])
+            return
+        
+        # Загрузка группы
+        try:
+            with open(group_file, 'r', encoding='utf-8') as f:
+                group_data = json.load(f)
+                overlay_files = [OVERLAYS_DIR / f"{b}.json" for b in group_data["biomes"]]
+                print(lang["processing_group"].format(group_file.stem))
+        except Exception as e:
+            print(f"Error loading group: {str(e)}")
+            return
+    else:
+        print(lang["invalid_option"])
+        return
+    # === КОНЕЦ ДОБАВЛЕНИЯ ===
+    
     # Проверка наличия глобального оверлея
     global_path = ALL_OVERLAY_DIR / "all_overlay.json"
     if not global_path.exists():
@@ -373,15 +427,14 @@ def apply_global_overlay(config):
         return
     
     # Проверка наличия оверлеев
-    overlays = list(OVERLAYS_DIR.glob("*.json"))
-    if not overlays:
+    if not overlay_files:  # Изменено: используем уже выбранный список
         print(lang["no_overlays"].format(OVERLAYS_DIR))
         return
     
     # Применение глобального оверлея
     processed_count = 0
-    for overlay_path in overlays:
-        if overlay_path.parent == ALL_OVERLAY_DIR:
+    for overlay_path in overlay_files:  # Изменено: используем выбранный список
+        if not overlay_path.exists() or overlay_path.parent == ALL_OVERLAY_DIR:
             continue
             
         biome_name = overlay_path.name
@@ -430,7 +483,7 @@ def create_empty_overlays(config):
         overlay_path = OVERLAYS_DIR / biome_name
         
         if not overlay_path.exists():
-            empty_overlay = {"features": [[] for _ in range(12)]}
+            empty_overlay = {"features": [[] for _ in range(11)]}
             
             with open(overlay_path, 'w', encoding='utf-8') as f:
                 json.dump(empty_overlay, f, indent=2, ensure_ascii=False)
@@ -440,7 +493,7 @@ def create_empty_overlays(config):
     # Создаем глобальный оверлей, если его нет
     global_path = ALL_OVERLAY_DIR / "all_overlay.json"
     if not global_path.exists():
-        empty_overlay = {"features": [[] for _ in range(12)]}
+        empty_overlay = {"features": [[] for _ in range(11)]}
         with open(global_path, 'w', encoding='utf-8') as f:
             json.dump(empty_overlay, f, indent=2, ensure_ascii=False)
         print(lang["global_overlay_created"])
